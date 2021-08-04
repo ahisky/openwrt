@@ -2,4 +2,12 @@
 # Copyright (C) 2007 OpenWrt.org
 #
 
+model="$(cat /tmp/sysinfo/model)"
+
+case "$model" in
+"ipTIME N704BCM")
+	exit
+	;;
+esac
+
 mtd fixtrx firmware
