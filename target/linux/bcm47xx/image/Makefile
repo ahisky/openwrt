@@ -49,14 +49,6 @@ endef
 # Images
 #################################################
 
-define Build/trx
-	$(STAGING_DIR_HOST)/bin/trx \
-		-m 33554432 \
-		-o $@.new \
-		-f $@
-	mv $@.new $@
-endef
-
 define Build/trx-with-loader
 	$(STAGING_DIR_HOST)/bin/trx \
 		-m 33554432 \
@@ -147,12 +139,6 @@ endef
 
 define Build/motorola-bin
 	$(STAGING_DIR_HOST)/bin/motorola-bin -$(MOTOROLA_DEVICE) $@ $@.new
-	mv $@.new $@
-endef
-
-define Build/pad-extra-header
-	dd if=/dev/zero bs=$(1) count=1 > $@.new
-	cat $@ >> $@.new
 	mv $@.new $@
 endef
 
