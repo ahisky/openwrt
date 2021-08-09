@@ -755,11 +755,12 @@ TARGET_DEVICES += iptime_a8004t
 
 define Device/iptime_a3004nd
   $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
   IMAGE_SIZE := 16128k
   UIMAGE_NAME := a3004nd
   DEVICE_VENDOR := ipTIME
   DEVICE_MODEL := A3004NS-Dual
-  DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware kmod-usb3
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt76x2
 endef
 TARGET_DEVICES += iptime_a3004nd
 
