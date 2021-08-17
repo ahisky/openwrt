@@ -9,49 +9,44 @@
 	compatible = "iptime,a3004nd", "mediatek,mt7621-soc";
 	model = "ipTIME A3004NS-Dual";
 
-        aliases {
-                led-boot = &led_cpu;
-                led-failsafe = &led_cpu;
-                led-running = &led_cpu;
-                led-upgrade = &led_cpu;
-        };
+	aliases {
+		led-boot = &led_cpu;
+		led-failsafe = &led_cpu;
+		led-running = &led_cpu;
+		led-upgrade = &led_cpu;
+	};
 
 	leds {
-              	compatible = "gpio-leds";
+		compatible = "gpio-leds";
 
-                led_cpu: cpu {
-                        label = "orange:cpu";
-                        gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
-                };
+		led_cpu: cpu {
+			label = "blue:cpu";
+			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
+		};
 
-                wlan2g {
-                        label = "orange:wlan2g";
-                        gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
-                        linux,default-trigger = "phy0radio";
-                };
+		usb {
+			label = "blue:usb";
+			gpios = <&gpio 7 GPIO_ACTIVE_LOW>;
+			trigger-sources = <&xhci_ehci_port1>;
+			linux,default-trigger = "usbport";
+		};
+	};
 
-                wlan5g {
-                        label = "orange:wlan5g";
-                        gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
-                        linux,default-trigger = "phy1radio";
-                };
-        };
+	keys {
+		compatible = "gpio-keys";
 
-        keys {
-                compatible = "gpio-keys";
+		reset {
+			label = "reset";
+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
 
-                reset {
-                       	label = "reset";
-                        gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
-                        linux,code = <KEY_RESTART>;
-                };
-
-                wps {
-                     	label = "wps";
-                        gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-                        linux,code = <KEY_WPS_BUTTON>;
-                };
-        };
+		wps {
+			label = "wps";
+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_WPS_BUTTON>;
+		};
+	 };
 };
 
 &spi0 {
@@ -95,8 +90,8 @@
 };
 
 &gmac0 {
-        nvmem-cells = <&macaddr_uboot_1fc20>;
-        nvmem-cell-names = "mac-address";
+	nvmem-cells = <&macaddr_uboot_1fc20>;
+	nvmem-cell-names = "mac-address";
 };
 
 &switch0 {
@@ -131,25 +126,35 @@
 };
 
 &pcie {
-       	status = "okay";
+	status = "okay";
 };
 
 &pcie0 {
-        wifi@0,0 {
-                compatible = "mediatek,mt76";
-                reg = <0x0000 0 0 0 0>;
-                mediatek,mtd-eeprom = <&factory 0x0000>;
-                ieee80211-freq-limit = <2400000 2500000>;
-        };
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0000 0 0 0 0>;
+		mediatek,mtd-eeprom = <&factory 0x8000>;
+		ieee80211-freq-limit = <5000000 6000000>;
+
+		led {
+			led-sources = <2>;
+			led-active-low;
+		};
+	};
 };
 
 &pcie1 {
-        wifi@0,0 {
-                compatible = "mediatek,mt76";
-                reg = <0x0000 0 0 0 0>;
-                mediatek,mtd-eeprom = <&factory 0x8000>;
-                ieee80211-freq-limit = <5000000 6000000>;
-        };
+	wifi@0,0 {
+		compatible = "mediatek,mt76";
+		reg = <0x0000 0 0 0 0>;
+		mediatek,mtd-eeprom = <&factory 0x0000>;
+		ieee80211-freq-limit = <2400000 2500000>;
+
+		led {
+			led-sources = <2>;
+			led-active-low;
+		};
+	};
 };
 
 &state_default {
@@ -160,16 +165,15 @@
 };
 
 &uboot {
-        compatible = "nvmem-cells";
-        #address-cells = <1>;
-        #size-cells = <1>;
+	compatible = "nvmem-cells";
+	#address-cells = <1>;
+	#size-cells = <1>;
 
-        macaddr_uboot_1fc20: macaddr@1fc20 {
-                reg = <0x1fc20 0x6>;
-        };
+	macaddr_uboot_1fc20: macaddr@1fc20 {
+		reg = <0x1fc20 0x6>;
+	};
 
 	macaddr_uboot_1fc40: macaddr@1fc40 {
-                reg = <0x1fc40 0x6>;
-        };
+		reg = <0x1fc40 0x6>;
+	};
 };
-
